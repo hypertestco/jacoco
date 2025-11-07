@@ -17,11 +17,17 @@ import java.util.HashMap;
 public class ProbeArrRefToExecutionDataMap {
 	static private final HashMap<boolean[], ExecutionData> hashMap = new HashMap<boolean[], ExecutionData>();
 
-	static public void set(final boolean[] array, final ExecutionData data) {
-		hashMap.put(array, data);
+	static final Object lock = new Object();
+
+	public static void set(final boolean[] array, final ExecutionData data) {
+		synchronized (lock) {
+			hashMap.put(array, data);
+		}
 	}
 
 	static public ExecutionData get(final boolean[] array) {
-		return hashMap.get(array);
+		synchronized (lock) {
+			return hashMap.get(array);
+		}
 	}
 }
